@@ -4,8 +4,9 @@ import java.util.List;
 public class Environment {
 	
 	private int[][] grid;
-	private int[] liveConditions = {2, 3}, birthConditions = {3}; // Defines what amount of alive neighboring cells are need to live/birth
-	private boolean[] stateLivingStatuses = {false, true};        // Defines which cell states are alive
+	public boolean[] liveConditions = {false, false, true, true, false, false, false, false, false},
+					 birthConditions = {false, false, false, true, false, false, false, false, false};
+	public boolean[] stateLivingStatuses = {false, true, false, false, false, false, false, false};
 	private int generation = 0;
 	
 	public Environment(int width, int height) {
@@ -76,26 +77,12 @@ public class Environment {
 					}
 				}
 				
-				if (stateLivingStatuses[getCellState(x, y)]) {
-					boolean live = false;
-					for (int liveCondition : liveConditions) {
-						if (livingNeighbors == liveCondition) {
-							live = true;
-						}
-					}
-					
-					if (!live) {
+				if (stateLivingStatuses[getCellState(x, y)]) {				
+					if (!liveConditions[livingNeighbors]) {
 						newGrid[x][y] = 0;
 					}
 				} else {
-					boolean born = false;
-					for (int birthCondition : birthConditions) {
-						if (livingNeighbors == birthCondition) {
-							born = true;
-						}
-					}
-					
-					if (born) {
+					if (birthConditions[livingNeighbors]) {
 						int[] mostPopularState = {0, 0};
 						for (int[] stateCount : livingNeighborsStateCount) {
 							if (stateCount[1] > mostPopularState[1]) {
